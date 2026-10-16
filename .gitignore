@@ -1,0 +1,99 @@
+# --- Python / uv -------------------------------------------------------------
+# Virtual environment created by `uv sync` (never commit it)
+.venv/
+venv/
+env/
+ENV/
+.venv*/
+virtualenv/
+
+# uv cache / build artefacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+*.egg
+
+# NOTE: pyproject.toml, uv.lock and .python-version ARE tracked on purpose.
+
+# --- Tooling caches ----------------------------------------------------------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# --- Jupyter -----------------------------------------------------------------
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# --- Data (usually local-only, see data/README.md) ---------------------------
+# Trailing /* keeps the folders themselves traversable so the .gitkeep
+# placeholders below still get tracked, while every data file inside is ignored.
+data/raw/*
+data/interim/*
+data/processed/*
+data/external/*
+!data/*/.gitkeep
+
+# Generated outputs are rebuilt by the pipeline
+results/figures/*.png
+results/figures/*.pdf
+results/tables/*.csv
+results/tables/*.tex
+
+# Large / sensitive files
+*.parquet
+*.feather
+*.h5
+*.hdf5
+*.sqlite
+*.db
+*.zip
+*.tar.gz
+*.csv.gz
+
+# --- Secrets (never commit) --------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.yaml
+credentials.json
+
+# --- Editors / OS ------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
+
+# --- LaTeX / thesis build output --------------------------------------------
+docs/**/build/
+docs/**/*.aux
+docs/**/*.bbl
+docs/**/*.blg
+docs/**/*.fls
+docs/**/*.fdb_latexmk
+docs/**/*.out
+docs/**/*.synctex.gz
+docs/**/*.toc
+docs/**/*.log
