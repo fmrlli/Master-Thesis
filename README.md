@@ -49,6 +49,16 @@ uv sync                 # creates .venv and installs all dependencies
 `uv sync` creates the virtual environment at `.venv/` and installs exactly the
 versions pinned in `uv.lock`. Python itself is fetched by uv if needed.
 
+The environment also provides [`classy`](https://github.com/lesgourg/class_public),
+the CLASS Boltzmann code, taken from the local `class_public/` checkout next to
+this repo (`../class_public`, see `[tool.uv.sources]`). `uv sync` builds it — the
+C library via `make` and then the Cython extension — so a C toolchain (`gcc`,
+`make`) is required. After editing any CLASS source, rebuild with:
+
+```bash
+uv sync --reinstall-package classy
+```
+
 ## Common commands
 
 ```bash
@@ -58,6 +68,7 @@ uv add --dev pytest ruff       # add a development dependency
 uv remove <package>            # drop a dependency
 uv run python scripts/analyse.py   # run anything inside the environment
 uv run jupyter lab             # start Jupyter with the project kernel
+uv run python -m ipykernel install --user --name thesis --display-name "Python (thesis)"  # register kernel for notebooks outside this project
 uv run pytest                  # run the test suite
 uv run ruff check .            # lint
 ```

@@ -1,0 +1,38 @@
+[project]
+name = "thesis"
+version = "0.1.0"
+description = "Master's thesis: research code, data analysis and results"
+readme = "README.md"
+authors = [
+    { name = "Federico Morelli", email = "federico.morelli@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "classy",
+    "ipykernel>=6.29",
+    "jupyterlab>=4.2",
+    "matplotlib>=3.10",
+    "numpy>=2.1",
+    "pandas>=2.2",
+    "scikit-learn>=1.5",
+    "scipy>=1.14",
+]
+
+[project.scripts]
+thesis = "thesis:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.7",
+]
+
+[tool.uv.sources]
+# CLASS (Cosmological Boltzmann code) is vendored next to this project.
+# Its importable package is `classy`; the CLASS repo root *is* that package.
+# Editable so the notebooks and the compiled extension always track class_public/.
+classy = { path = "../class_public", editable = true }
+
+[build-system]
+requires = ["uv_build>=0.13.1,<0.14.0"]
+build-backend = "uv_build"
