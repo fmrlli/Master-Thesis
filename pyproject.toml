@@ -9,17 +9,17 @@ authors = [
 requires-python = ">=3.14"
 dependencies = [
     "classy",
+    "cobaya>=3.6.2",
+    "getdist>=1.7.7",
     "ipykernel>=6.29",
     "jupyterlab>=4.2",
     "matplotlib>=3.10",
     "numpy>=2.1",
     "pandas>=2.2",
+    "pixell>=0.32.7",
     "scikit-learn>=1.5",
     "scipy>=1.14",
 ]
-
-[project.scripts]
-thesis = "thesis:main"
 
 [dependency-groups]
 dev = [
@@ -33,6 +33,5 @@ dev = [
 # Editable so the notebooks and the compiled extension always track class_public/.
 classy = { path = "../class_public", editable = true }
 
-[build-system]
-requires = ["uv_build>=0.13.1,<0.14.0"]
-build-backend = "uv_build"
+# No [build-system]: this is a virtual project (scripts + notebooks), so uv
+# installs the dependencies but never tries to build/install a package.
