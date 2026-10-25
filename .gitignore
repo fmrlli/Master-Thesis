@@ -20,6 +20,15 @@ dist/
 wheels/
 *.egg
 
+# uv
+.uv/
+
+# outputs - nie committen
+chains/
+output/
+.cobaya/
+cosmo-packages/
+
 # NOTE: pyproject.toml, uv.lock and .python-version ARE tracked on purpose.
 
 # --- Tooling caches ----------------------------------------------------------

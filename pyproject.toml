@@ -1,37 +1,32 @@
 [project]
 name = "thesis"
 version = "0.1.0"
-description = "Master's thesis: research code, data analysis and results"
+description = "RWTH Physik Thesis - unified env Mac + Windows/WSL"
 readme = "README.md"
-authors = [
-    { name = "Federico Morelli", email = "federico.morelli@gmail.com" }
-]
-requires-python = ">=3.14"
+requires-python = ">=3.11,<3.13"
 dependencies = [
-    "classy",
-    "cobaya>=3.6.2",
-    "getdist>=1.7.7",
-    "ipykernel>=6.29",
-    "jupyterlab>=4.2",
-    "matplotlib>=3.10",
-    "numpy>=2.1",
-    "pandas>=2.2",
-    "pixell>=0.32.7",
-    "scikit-learn>=1.5",
-    "scipy>=1.14",
+  "numpy",
+  "scipy",
+  "matplotlib",
+  "pandas",
+  "pyyaml",
+  "ipython",
+  "jupyter",
+  "cython",
+  "mpi4py",
+  "cobaya",
+  "getdist",
+  "classy",
 ]
 
 [dependency-groups]
 dev = [
-    "pytest>=8",
-    "ruff>=0.7",
+  "ruff",
+  "pytest",
 ]
 
-[tool.uv.sources]
-# CLASS (Cosmological Boltzmann code) is vendored next to this project.
-# Its importable package is `classy`; the CLASS repo root *is* that package.
-# Editable so the notebooks and the compiled extension always track class_public/.
-classy = { path = "../class_public", editable = true }
+[tool.ruff]
+line-length = 100
 
-# No [build-system]: this is a virtual project (scripts + notebooks), so uv
-# installs the dependencies but never tries to build/install a package.
+[tool.pytest.ini_options]
+testpaths = ["tests"]
