@@ -17,6 +17,12 @@ dependencies = [
   "cobaya",
   "getdist",
   "classy",
+  "candl-like>=2.2.0",
+  "clipy-like>=0.15",
+  "spt-candl-data",
+  "candl-data",
+  "gpjax<=0.18.0",
+  "jax<0.6",
 ]
 
 [dependency-groups]
@@ -30,3 +36,7 @@ line-length = 100
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.uv.sources]
+spt-candl-data = { path = "../spt_candl_data", editable = true }
+candl-data = { path = "../candl_data", editable = true }

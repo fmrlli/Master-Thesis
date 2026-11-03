@@ -1,0 +1,112 @@
+# SPT-3G D1 baseline LCDM: TT,TE,EE (SPTlite foreground-marginalised) + tau prior
+# Target: SPT-3G Collaboration, Camphuis et al. 2025 / Quan et al. 2025 (arXiv:2502.19475)
+#
+# Choices made to match the paper & Planck comparison setup:
+#  - one massive neutrino, m = 0.06 eV, N_eff = 3.046 (N_ur = 2.0328 for CLASS)
+#  - BBN-consistent helium, halofit non-linear lensing correction
+#  - Official SPT-3G D1 Gaussian prior on tau_reio: N(0.051, 0.006)
+#  - Official SPT-3G D1 calibration priors: Tcal ~ N(1.0, 0.0036), Ecal ~ U(0.8, 1.2)
+#  - Identical parameter names to planck2018_baseline.yaml for direct GetDist comparison
+
+theory:
+  classy:
+    extra_args:
+      N_ncdm: 1
+      m_ncdm: 0.06
+      deg_ncdm: 1
+      N_ur: 2.0328
+      T_cmb: 2.7255
+      YHe: BBN
+      non_linear: halofit
+
+likelihood:
+  spt3g_d1_tne_lite:
+    external: !!python/name:candl.interface.CandlCobayaLikelihood ''
+    data_set_file: !!python/name:spt_candl_data.SPT3G_D1_TnE_lite ''
+    clear_internal_priors: true
+    feedback: true
+
+params:
+  # --- sampled cosmological parameters ---
+  logA:
+    prior: {min: 1.61, max: 3.91}
+    ref: {dist: norm, loc: 3.044, scale: 0.01}
+    proposal: 0.005
+    latex: \log(10^{10} A_\mathrm{s})
+    drop: true
+  A_s:
+    value: 'lambda logA: 1e-10*np.exp(logA)'
+    latex: A_\mathrm{s}
+  n_s:
+    prior: {min: 0.8, max: 1.2}
+    ref: {dist: norm, loc: 0.965, scale: 0.004}
+    proposal: 0.002
+    latex: n_\mathrm{s}
+  theta_s_100:
+    prior: {min: 0.5, max: 10}
+    ref: {dist: norm, loc: 1.0416, scale: 0.0004}
+    proposal: 0.0002
+    latex: 100\theta_\mathrm{s}
+    renames: [theta, theta_MC_100]
+  omega_b:
+    prior: {min: 0.005, max: 0.1}
+    ref: {dist: norm, loc: 0.0224, scale: 0.0001}
+    proposal: 0.0001
+    latex: \Omega_\mathrm{b} h^2
+    renames: [ombh2, omegabh2]
+  omega_cdm:
+    prior: {min: 0.001, max: 0.99}
+    ref: {dist: norm, loc: 0.12, scale: 0.001}
+    proposal: 0.0005
+    latex: \Omega_\mathrm{c} h^2
+    renames: [omch2, omegach2]
+  tau_reio:
+    prior: {dist: norm, loc: 0.051, scale: 0.006}
+    ref: {dist: norm, loc: 0.051, scale: 0.006}
+    proposal: 0.003
+    latex: \tau_\mathrm{reio}
+    renames: tau
+
+  # --- SPT-3G D1 SPTlite calibration nuisance parameters ---
+  Tcal:
+    prior: {dist: norm, loc: 1.0, scale: 0.0036}
+    ref: {dist: norm, loc: 1.0, scale: 0.001}
+    proposal: 0.001
+    latex: T_\mathrm{cal}
+  Ecal:
+    prior: {min: 0.8, max: 1.2}
+    ref: {dist: norm, loc: 1.0, scale: 0.005}
+    proposal: 0.003
+    latex: E_\mathrm{cal}
+
+  # --- derived parameters (identical to planck2018_baseline.yaml) ---
+  H0: {latex: H_0}
+  Omega_m: {latex: '\Omega_\mathrm{m}'}
+  Omega_Lambda: {latex: \Omega_\Lambda}
+  omegamh2:
+    derived: 'lambda Omega_m, H0: Omega_m*(H0/100)**2'
+    latex: \Omega_\mathrm{m} h^2
+  sigma8: {latex: \sigma_8}
+  s8h5:
+    derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
+    latex: \sigma_8/h^{0.5}
+  S8:
+    derived: 'lambda sigma8, Omega_m: sigma8*(Omega_m/0.3)**0.5'
+    latex: S_8
+  z_reio: {latex: 'z_\mathrm{re}'}
+  YHe: {latex: 'Y_\mathrm{P}'}
+  age: {latex: '{\rm Age}/\mathrm{Gyr}'}
+  rs_drag: {latex: 'r_\mathrm{drag}'}
+
+sampler:
+  mcmc:
+    covmat: ../spt_candl_data/cobaya/SPT3G_D1_TnE/input_ttteee.covmat
+    drag: true
+    oversample_power: 0.4
+    proposal_scale: 1.9
+    Rminus1_stop: 0.01
+    Rminus1_cl_stop: 0.2
+    learn_proposal: true
+    max_tries: 10000
+
+output: chains/spt3g_d1_baseline/chain
