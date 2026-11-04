@@ -26,7 +26,7 @@ EXPERIMENTS = [
 # Published reference values (mean +/- 1 sigma) from the official papers:
 #  - Planck 2018 VI (arXiv:1807.06209), Table 2, "TT,TE,EE+lowE+lensing"
 #  - SPT-3G D1 (Camphuis et al. 2025, arXiv:2502.19475), LCDM TT,TE,EE + tau prior
-#  - ACT DR6 (Louis et al. 2025, arXiv:2503.14452), Table 3, ACT DR6 CMB-only + tau prior
+#  - ACT DR6 (Louis et al. 2025, arXiv:2503.14452), Table 5, "ACT" (CMB-only + tau prior)
 PAPER_REFERENCES = {
     "Planck 2018 (TT,TE,EE+lowE+lens)": {
         "omega_b": (0.02237, 0.00015),
@@ -47,14 +47,19 @@ PAPER_REFERENCES = {
         "tau_reio": (0.0510, 0.0058),
         "logA": (3.056, 0.016),
         "n_s": (0.949, 0.013),
-        "H0": (66.66, 0.60),
+        "H0": (66.66, 1.20),
     },
     "ACT DR6 (TT,TE,EE CMB-only)": {
-        "omega_b": (0.02260, 0.00013),
-        "omega_cdm": (0.1180, 0.0015),
-        "tau_reio": (0.0566, 0.0058),
-        "H0": (68.22, 0.50),
-        "sigma8": (0.813, 0.007),
+        "omega_b": (0.02259, 0.00017),
+        "omega_cdm": (0.1238, 0.0021),
+        "theta_s_100": (1.04075, 0.00031),
+        "tau_reio": (0.0562, 0.0058),
+        "logA": (3.053, 0.013),
+        "n_s": (0.9666, 0.0077),
+        "H0": (66.11, 0.79),
+        "Omega_m": (0.337, 0.013),
+        "sigma8": (0.8263, 0.0074),
+        "S8": (0.875, 0.023),
     },
 }
 
