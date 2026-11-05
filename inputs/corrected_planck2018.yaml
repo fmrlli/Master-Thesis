@@ -1,0 +1,173 @@
+# ==============================================================================
+# Corrected Planck 2018 Baseline LCDM: TT,TE,EE + lowl + lowE + lensing
+# ==============================================================================
+# Primary Target:
+#   Planck Collaboration (2020), "Planck 2018 results. VI. Cosmological parameters",
+#   A&A 641, A6 (arXiv:1807.06209) [hereafter PCP18],
+#   Table 1 (p. 14) & Table 2 (p. 15), column "TT,TE,EE+lowE+lensing".
+#
+# Prior Range Reference:
+#   PCP18 Section 2.1 ("Theoretical model", p. 6) defers baseline parameter
+#   definitions and flat prior ranges to:
+#   - Planck 2013 results. XVI (arXiv:1303.5076) [PCP13], Table 1 (p. 11)
+#   - Planck 2015 results. XIII (arXiv:1502.01589) [PCP15], Table 1 (p. 7)
+#   - Cobaya preset database: cobaya/cosmo_input/input_database.py
+# ==============================================================================
+
+theory:
+  classy:
+    extra_args:
+      # --- Neutrino sector ---
+      # PCP18 Section 2.1 (p. 6) & Section 7.5.1 (p. 46):
+      #   3 active neutrino species approximated as 2 massless + 1 massive with
+      #   m_nu = 0.06 eV (normal hierarchy minimal mass).
+      N_ncdm: 1
+      m_ncdm: 0.06
+      deg_ncdm: 1
+
+      # PCP18 Section 7.5.2 (pp. 46-47):
+      #   Standard Model effective relativistic species N_eff = 3.046 (Mangano et al. 2005).
+      #   In CLASS (explanatory.ini L351-L373), 1 massive ncdm species with default
+      #   T_ncdm = 0.71611 contributes delta_N_eff = 1.0132, so the 2 massless species
+      #   require N_ur = 3.046 - 1.0132 = 2.0328 (also in Cobaya input_database.py L403).
+      #   (Note: CLASS's newer N_ur = 2.0308 corresponds to the 2020 update N_eff = 3.044).
+      N_ur: 2.0328
+
+      # --- Photon temperature & BBN Helium ---
+      # PCP13 Section 2 (p. 5) & CLASS explanatory.ini L340:
+      #   COBE/FIRAS CMB temperature T_0 = 2.7255 K (Fixsen 2009).
+      T_cmb: 2.7255
+
+      # PCP18 Section 2.1 (p. 6, bullet 1) & Section 7.6 (p. 51):
+      #   Primordial helium mass fraction Y_P computed self-consistently from BBN.
+      YHe: BBN
+
+      # --- Non-linear matter power spectrum ---
+      # PCP18 Section 2.1 (p. 6, bullet 2):
+      #   Planck 2018 replaced Takahashi et al. (2012) Halofit (used in PCP15) with
+      #   HMcode (Mead et al. 2015, 2016; arXiv:1602.02154).
+      #   In CLASS (explanatory.ini L884), hmcode_version: '2016' selects Mead et al. (2016).
+      non_linear: hmcode
+      hmcode_version: '2016'
+
+likelihood:
+  # PCP18 Section 2.2 ("Likelihoods", pp. 7-13):
+  #   - lowl (TT, 2 <= ell <= 29): Commander component-separation likelihood
+  #   - lowE (EE, 2 <= ell <= 29): SimAll HFI polarization likelihood
+  #   - TT,TE,EE (high-ell, ell >= 30): Plik cross-half-mission likelihood
+  #   - lensing (8 <= L <= 400): CMB lensing reconstruction power spectrum C_L^{\phi\phi}
+  # Setting `null` loads Cobaya's default clik wrappers and automatically injects
+  # all ~20 Plik foreground/calibration nuisance parameters and their priors.
+  planck_2018_lowl.TT_clik: null
+  planck_2018_lowl.EE_clik: null
+  planck_2018_highl_plik.TTTEEE: null
+  planck_2018_lensing.clik: null
+
+params:
+  # ============================================================================
+  # 6 Base LCDM Parameters (sampled with flat priors)
+  #   - Flat prior bounds: PCP13 Table 1 (p. 11) & Cobaya input_database.py
+  #   - `ref` (loc, scale): Posterior mean & 1-sigma from PCP18 Table 2 (p. 15, col. 6)
+  #   - `proposal`: Initial 1D step size (~0.5 sigma, from Cobaya input_database.py)
+  # ============================================================================
+  logA:
+    prior: {min: 1.61, max: 3.91}               # Cobaya input_database.py L27 / CosmoMC default
+    ref: {dist: norm, loc: 3.044, scale: 0.014} # PCP18 Table 2 (p. 15): 3.044 +/- 0.014
+    proposal: 0.005
+    latex: \log(10^{10} A_\mathrm{s})
+    drop: true
+  A_s:
+    value: 'lambda logA: 1e-10*np.exp(logA)'
+    latex: A_\mathrm{s}
+
+  n_s:
+    prior: {min: 0.8, max: 1.2}                 # Cobaya input_database.py L35 / CosmoMC default
+    ref: {dist: norm, loc: 0.9649, scale: 0.0042} # PCP18 Table 2 (p. 15): 0.9649 +/- 0.0042
+    proposal: 0.002
+    latex: n_\mathrm{s}
+
+  theta_s_100:
+    # Sampled instead of H0 to match Planck's 6-parameter basis and avoid the H0-Omega_m
+    # degeneracy. CLASS defines theta_s at the exact maximum of the visibility function
+    # (100*theta_s ~ 1.0416-1.0418; see explanatory.ini L205-L212 & Cobaya input_database.py L278),
+    # which is slightly shifted from CosmoMC's analytic approximation 100*theta_MC = 1.04092.
+    prior: {min: 0.5, max: 10}                  # PCP13 Table 1 (p. 11) & input_database.py L279
+    ref: {dist: norm, loc: 1.0416, scale: 0.0004} # Cobaya input_database.py L280
+    proposal: 0.0002
+    latex: 100\theta_\mathrm{s}
+    renames: theta
+
+  omega_b:
+    prior: {min: 0.005, max: 0.1}               # PCP13 Table 1 (p. 11) & input_database.py L318
+    ref: {dist: norm, loc: 0.02237, scale: 0.00015} # PCP18 Table 2 (p. 15): 0.02237 +/- 0.00015
+    proposal: 0.0001
+    latex: \Omega_\mathrm{b} h^2
+
+  omega_cdm:
+    prior: {min: 0.001, max: 0.99}              # PCP13 Table 1 (p. 11) & input_database.py L325
+    ref: {dist: norm, loc: 0.1200, scale: 0.0012} # PCP18 Table 2 (p. 15): 0.1200 +/- 0.0012
+    proposal: 0.0005
+    latex: \Omega_\mathrm{c} h^2
+
+  tau_reio:
+    # Flat prior because `planck_2018_lowl.EE_clik` (lowE) is included in the likelihood
+    # and directly constrains tau. Using a Gaussian prior here would double-count lowE.
+    prior: {min: 0.01, max: 0.8}                # PCP13 Table 1 (p. 11) & input_database.py L511
+    ref: {dist: norm, loc: 0.0544, scale: 0.0073} # PCP18 Table 2 (p. 15): 0.0544 +/- 0.0073
+    proposal: 0.003
+    latex: \tau_\mathrm{reio}
+
+  # ============================================================================
+  # Derived Parameters (for direct comparison with PCP18 Table 2, p. 15)
+  # ============================================================================
+  H0: {latex: H_0}
+  Omega_Lambda: {latex: \Omega_\Lambda}
+  Omega_m: {latex: '\Omega_\mathrm{m}'}
+  omegamh2:
+    derived: 'lambda Omega_m, H0: Omega_m*(H0/100)**2'
+    latex: \Omega_\mathrm{m} h^2
+  omegamh3:
+    derived: 'lambda Omega_m, H0: Omega_m*(H0/100)**3'
+    latex: \Omega_\mathrm{m} h^3
+  sigma8: {latex: \sigma_8}
+  S8:
+    # PCP18 Table 2 (p. 15): S_8 \equiv \sigma_8 (\Omega_m / 0.3)^{0.5}
+    derived: 'lambda sigma8, Omega_m: sigma8*(Omega_m/0.3)**0.5'
+    latex: S_8
+  s8omegamp25:
+    # PCP18 Table 2 (p. 15): \sigma_8 \Omega_m^{0.25}
+    derived: 'lambda sigma8, Omega_m: sigma8*Omega_m**0.25'
+    latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
+  s8h5:
+    # PCP15 Table 4 (p. 16) & Cobaya input_database.py L715: \sigma_8 / h^{0.5}
+    derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
+    latex: \sigma_8/h^{0.5}
+  z_reio: {latex: 'z_\mathrm{re}'}
+  A:
+    # PCP18 Table 2 (p. 15): 10^9 A_s
+    derived: 'lambda A_s: 1e9*A_s'
+    latex: 10^9 A_\mathrm{s}
+  clamp:
+    # PCP18 Table 2 (p. 15): 10^9 A_s e^{-2\tau}
+    derived: 'lambda A_s, tau_reio: 1e9*A_s*np.exp(-2*tau_reio)'
+    latex: 10^9 A_\mathrm{s} e^{-2\tau}
+  YHe: {latex: 'Y_\mathrm{P}'}
+  age: {latex: '{\rm Age}/\mathrm{Gyr}'}
+  rs_drag: {latex: 'r_\mathrm{drag}'}
+
+sampler:
+  # Cobaya MCMC sampler settings:
+  #   - Defaults documented in cobaya/samplers/mcmc/mcmc.yaml
+  #   - Fast-slow dragging setup (`drag: true`, `proposal_scale: 1.9`) follows
+  #     Lewis (2013, arXiv:1304.4473) and spt_candl_data/cobaya/SPT3G_D1_TnE/cobaya_ttteee.yaml
+  mcmc:
+    covmat: auto            # mcmc.yaml L13: auto-selects Planck covmat from packages dir
+    drag: true              # mcmc.yaml L57: fast-slow dragging over ~20 fast plik nuisance params
+    oversample_power: 0.4   # mcmc.yaml L53: default oversampling power for speed hierarchy
+    proposal_scale: 1.9     # tuned for drag: true (default without dragging is 2.4, mcmc.yaml L17)
+    Rminus1_stop: 0.01      # mcmc.yaml L39: Gelman-Rubin convergence on parameter means
+    Rminus1_cl_stop: 0.2    # mcmc.yaml L41: Gelman-Rubin convergence on 95% confidence limits
+    learn_proposal: true    # mcmc.yaml L27: adaptively updates proposal covariance matrix
+    max_tries: 10000        # prevents premature halt during initial burn-in (default is 40d)
+
+output: chains/corrected_planck2018/chain

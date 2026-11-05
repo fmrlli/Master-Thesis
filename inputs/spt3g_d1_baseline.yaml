@@ -1,13 +1,3 @@
-# SPT-3G D1 baseline LCDM: TT,TE,EE (SPTlite foreground-marginalised) + tau prior
-# Target: SPT-3G Collaboration, Camphuis et al. 2025 / Quan et al. 2025 (arXiv:2502.19475)
-#
-# Choices made to match the paper & Planck comparison setup:
-#  - one massive neutrino, m = 0.06 eV, N_eff = 3.046 (N_ur = 2.0328 for CLASS)
-#  - BBN-consistent helium, halofit non-linear lensing correction
-#  - Official SPT-3G D1 Gaussian prior on tau_reio: N(0.051, 0.006)
-#  - Official SPT-3G D1 calibration priors: Tcal ~ N(1.0, 0.0036), Ecal ~ U(0.8, 1.2)
-#  - Identical parameter names to planck2018_baseline.yaml for direct GetDist comparison
-
 theory:
   classy:
     extra_args:
@@ -27,7 +17,6 @@ likelihood:
     feedback: true
 
 params:
-  # --- sampled cosmological parameters ---
   logA:
     prior: {min: 1.61, max: 3.91}
     ref: {dist: norm, loc: 3.044, scale: 0.01}
@@ -66,8 +55,7 @@ params:
     proposal: 0.003
     latex: \tau_\mathrm{reio}
     renames: tau
-
-  # --- SPT-3G D1 SPTlite calibration nuisance parameters ---
+  #cal
   Tcal:
     prior: {dist: norm, loc: 1.0, scale: 0.0036}
     ref: {dist: norm, loc: 1.0, scale: 0.001}
@@ -78,8 +66,7 @@ params:
     ref: {dist: norm, loc: 1.0, scale: 0.005}
     proposal: 0.003
     latex: E_\mathrm{cal}
-
-  # --- derived parameters (identical to planck2018_baseline.yaml) ---
+#der
   H0: {latex: H_0}
   Omega_m: {latex: '\Omega_\mathrm{m}'}
   Omega_Lambda: {latex: \Omega_\Lambda}

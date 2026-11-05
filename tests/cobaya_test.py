@@ -1,4 +1,5 @@
 import cobaya
+#slide21?
 
 cobaya_info = {}
 cobaya_info["likelihood"] = {}
@@ -66,7 +67,7 @@ cobaya_info["params"] = {'H0': {'latex': 'H_0',
                                       'ref': {'dist': 'norm', 'loc': 0.055, 'scale': 0.003},
                                       'proposal': 0.003}}
 
-
+#cobaya_info["params"].update?
 cobaya_info["params"] = {'A_s': {'latex': 'A_\\mathrm{s}',
                                  'value': 'lambda logA: 1e-10*np.exp(logA)'},
                          'Omega_m': {'latex': '\\Omega_\\mathrm{m}'},
@@ -79,7 +80,7 @@ cobaya_info["params"] = {'A_s': {'latex': 'A_\\mathrm{s}',
                          'age': {'latex': '{\\rm{Age}}/\\mathrm{Gyr}'},
                          'rs_drag': {'latex': 'r_\\mathrm{drag}'}}
 
-cobaya_info["output"] = '/my_new_MCMC_directory/chain'
+cobaya_info["output"] = 'thesis_code/Code/test_MCMC/chain'
 cobaya_info["force"] = False
 cobaya_info["resume"] = True
 cobaya_info["timing"] = True

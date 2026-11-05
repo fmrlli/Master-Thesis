@@ -1,12 +1,3 @@
-"""
-Load converged MCMC chains for Planck 2018, SPT-3G D1, and ACT DR6,
-produce a joint GetDist triangle plot, and compare parameter values
-against the official published paper tables.
-
-Usage (from Code/):
-    .venv/bin/python scripts/plot_chains.py
-"""
-
 from pathlib import Path
 import matplotlib.pyplot as plt
 from getdist import loadMCSamples
@@ -25,7 +16,7 @@ EXPERIMENTS = [
 
 # Published reference values (mean +/- 1 sigma) from the official papers:
 #  - Planck 2018 VI (arXiv:1807.06209), Table 2, "TT,TE,EE+lowE+lensing"
-#  - SPT-3G D1 (Camphuis et al. 2025, arXiv:2502.19475), LCDM TT,TE,EE + tau prior
+#  - SPT-3G D1 (Camphuis et al. 2025, arXiv:2506.20707), LCDM TT,TE,EE + tau prior
 #  - ACT DR6 (Louis et al. 2025, arXiv:2503.14452), Table 5, "ACT" (CMB-only + tau prior)
 PAPER_REFERENCES = {
     "Planck 2018 (TT,TE,EE+lowE+lens)": {

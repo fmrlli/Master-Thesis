@@ -1,13 +1,3 @@
-# ACT DR6 baseline LCDM: TT,TE,EE (ACT DR6 CMB-only) + tau prior
-# Target: ACT Collaboration, Louis et al. 2025 (arXiv:2503.14452) & Calabrese et al. 2025 (arXiv:2503.14454)
-#
-# Choices made to match the paper & Planck/SPT comparison setup:
-#  - one massive neutrino, m = 0.06 eV, N_eff = 3.046 (N_ur = 2.0328 for CLASS)
-#  - BBN-consistent helium, halofit non-linear lensing correction
-#  - Official ACT DR6 Gaussian prior on tau_reio: N(0.0566, 0.0058)
-#  - Official ACT DR6 calibration priors: A_act ~ N(1.0, 0.003), P_act ~ U(0.9, 1.1)
-#  - Identical parameter names to planck2018_baseline.yaml for direct GetDist comparison
-
 theory:
   classy:
     extra_args:
@@ -27,7 +17,6 @@ likelihood:
     feedback: true
 
 params:
-  # --- sampled cosmological parameters ---
   logA:
     prior: {min: 1.61, max: 3.91}
     ref: {dist: norm, loc: 3.044, scale: 0.01}
@@ -67,7 +56,6 @@ params:
     latex: \tau_\mathrm{reio}
     renames: tau
 
-  # --- ACT DR6 CMB-only calibration nuisance parameters ---
   A_act:
     prior: {dist: norm, loc: 1.0, scale: 0.003}
     ref: {dist: norm, loc: 1.0, scale: 0.001}
@@ -79,13 +67,12 @@ params:
     proposal: 0.003
     latex: p_\mathrm{ACT}
 
-  # --- derived parameters (identical to planck2018_baseline.yaml) ---
   H0: {latex: H_0}
   Omega_m: {latex: '\Omega_\mathrm{m}'}
-  Omega_Lambda: {latex: \Omega_\Lambda}
+  Omega_Lambda: {latex: '\Omega_\Lambda'}
   omegamh2:
     derived: 'lambda Omega_m, H0: Omega_m*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2
+    latex: '\Omega_\mathrm{m} h^2'
   sigma8: {latex: \sigma_8}
   s8h5:
     derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
