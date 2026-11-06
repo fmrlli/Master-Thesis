@@ -97,3 +97,7 @@ sampler:
     max_tries: 10000
 
 output: chains/spt3g_d1_baseline/chain
+resume: true
+timing: true
+debug: false
+

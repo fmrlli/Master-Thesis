@@ -4,7 +4,7 @@ theory:
       N_ncdm: 1
       m_ncdm: 0.06
       deg_ncdm: 1
-      N_ur: #2.0328 CLASS: 2.0308; paper uses 2.0328 CAMB/Old framework?
+      N_ur: 2.0328 #CLASS: 2.0308; paper uses 2.0328 CAMB/Old framework?
       T_cmb: 2.7255
       YHe: BBN #should be the default though
       non_linear: halofit #I think I misread Planck2018 VI, it should be HMcode
@@ -82,3 +82,7 @@ sampler:
     measure_speeds: true              
 
 output: chains/planck2018_baseline/chain
+resume: true
+timing: true
+debug: false
+

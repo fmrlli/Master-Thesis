@@ -97,3 +97,7 @@ sampler:
     max_tries: 10000
 
 output: chains/act_dr6_baseline/chain
+resume: true
+timing: true
+debug: false
+

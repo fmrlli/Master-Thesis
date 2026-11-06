@@ -7,17 +7,13 @@ import getdist.plots as gdplt
 CODE_DIR = Path(__file__).resolve().parent.parent
 CHAINS_DIR = CODE_DIR / "chains"
 
-# Chains to look for (in order of plotting)
+#chains
 EXPERIMENTS = [
     ("Planck 2018 (TT,TE,EE+lowE+lens)", CHAINS_DIR / "planck2018_baseline" / "chain"),
     ("SPT-3G D1 (TT,TE,EE SPTlite)", CHAINS_DIR / "spt3g_d1_baseline" / "chain"),
     ("ACT DR6 (TT,TE,EE CMB-only)", CHAINS_DIR / "act_dr6_baseline" / "chain"),
 ]
 
-# Published reference values (mean +/- 1 sigma) from the official papers:
-#  - Planck 2018 VI (arXiv:1807.06209), Table 2, "TT,TE,EE+lowE+lensing"
-#  - SPT-3G D1 (Camphuis et al. 2025, arXiv:2506.20707), LCDM TT,TE,EE + tau prior
-#  - ACT DR6 (Louis et al. 2025, arXiv:2503.14452), Table 5, "ACT" (CMB-only + tau prior)
 PAPER_REFERENCES = {
     "Planck 2018 (TT,TE,EE+lowE+lens)": {
         "omega_b": (0.02237, 0.00015),
@@ -85,12 +81,11 @@ def main():
         print("No chains found in chains/{planck2018_baseline,spt3g_d1_baseline,act_dr6_baseline}/.")
         return
 
-    # 1. Joint triangle plot
+    
     gdplot = gdplt.get_subplot_plotter(width_inch=12)
     gdplot.settings.legend_fontsize = 12
     gdplot.settings.axes_labelsize = 12
 
-    # Overlay Planck 2018 official central values as dashed reference markers
     planck_markers = {
         k: v[0]
         for k, v in PAPER_REFERENCES["Planck 2018 (TT,TE,EE+lowE+lens)"].items()
@@ -108,7 +103,6 @@ def main():
     plt.savefig(out_fig, dpi=200, bbox_inches="tight")
     print(f"\nSaved triangle plot to: {out_fig}")
 
-    # 2. Side-by-side comparison against published paper values
     for label, smp in zip(loaded_labels, loaded_samples):
         print(f"\n{'=' * 72}")
         print(f"  {label}")
@@ -127,7 +121,6 @@ def main():
                 ref_str = "—"
             print(f"  {p:<14} | {mcmc_str:<28} | {ref_str:<22}")
 
-    # 3. LaTeX table for thesis
     latex_out = CHAINS_DIR / "comparison_table.tex"
     table_tex = ResultTable(
         ncol=1,
